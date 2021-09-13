@@ -1,0 +1,637 @@
+{% extends 'saka/header.html' %}
+{% load static %}
+
+{% block extra %}
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>گزارش‌گیری | سامانه ارزیابی کیفیت آزمایشگاه‌ها</title>
+    <link rel="stylesheet" href="{% static 'saka/assets/bootstrap/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=ABeeZee">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Abril+Fatface">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Alfa+Slab+One">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Archivo+Black">
+    <link rel="stylesheet" href="{% static 'saka/assets/fonts/font-awesome.min.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="{% static 'saka/assets/css/styles.css' %}">
+    <style>
+        .tableFixHead {
+            overflow-y: auto;
+            height: 500px;
+        }
+
+        .tableFixHead thead th {
+            position: sticky;
+            top: 0;
+        }
+    </style>
+    <!--chart-->
+    <script type="text/javascript" href="{% static 'saka/js/jquery.min.js' %}"></script>
+    <script type="text/javascript" href="{% static 'saka/js/Chart.min.js' %}"></script>
+    <!--filter and drup & down list-->
+    <script src="{% static 'saka/js/somejsfile.js'%}"></script>
+    <script type="text/javascript">
+        $('#input1').change(function () {
+            var $this = $(this),
+                value = $this.val();
+            alert(value);
+        });
+        $('#textbox1').change(function () {
+            var $this = $(this),
+                value = $this.val();
+            alert(value);
+        });
+        $('[data-name="disable-button"]').click(function () {
+            $('[data-mddatetimepicker="true"][data-targetselector="#input1"]').MdPersianDateTimePicker('disable', true);
+        });
+        $('[data-name="enable-button"]').click(function () {
+            $('[data-mddatetimepicker="true"][data-targetselector="#input1"]').MdPersianDateTimePicker('disable', false);
+        });
+    </script>
+{% endblock %}
+
+{% block main %}
+    <form action="Report.php" method="POST" class="reportform no-print-margin" name="myform" id="myform">
+        <div class="row text-center d-flex flex-column mx-auto report-header report-no-print">
+            <div class="col-auto text-secondary d-flex report-no-print">
+                <div class="form-check report-no-print"><input
+                        class="form-check-input" onChange="this.form.submit();"
+                    <?php if ($methodfilter == "AllGroup") {
+                                    echo " checked = checked ";
+                                } ?>type="radio" value="AllGroup" id="AllGroup" name="methodfilter"><label
+                            class="form-check-label" for="AllGroup">AllGroup</label></div>
+                <div class="form-check report-no-print"><input
+                        class="form-check-input"
+                        onChange="this.form.submit();" <?php if ($methodfilter == "MethodGroup") {
+                            echo " checked = checked ";
+                        } ?> type="radio" value="MethodGroup" id="MethodGroup" name="methodfilter"><label
+                        class="form-check-label" for="MethodGroup">MethodGroup</label></div>
+                <div class="form-check report-no-print"><input
+                        class="form-check-input"
+                        onChange="this.form.submit();" <?php if ($methodfilter == "InstumentGroup") {
+                            echo " checked = checked ";
+                        } ?> type="radio" value="InstumentGroup" id="InstumentGroup" name="methodfilter"><label
+                        class="form-check-label" for="InstumentGroup">InstumentGroup</label></div>
+                <div class="form-check report-no-print"><input
+                        class="form-check-input"
+                        onChange="this.form.submit();" <?php if ($methodfilter == "PeerGroup") {
+
+                            echo " checked = checked ";
+                        } ?> type="radio" value="PeerGroup" id="PeerGroup" name="methodfilter"><label
+                        class="form-check-label" for="PeerGroup">PeerGroup</label></div>
+            </div>
+            <div class="col-auto text-primary d-flex align-items-lg-center report-no-print">
+                <div class="form-check report-no-print"><input
+                        class="form-check-input"
+                        onChange="this.form.submit();"
+                    <?php if ($Iddepartment == 1) {
+                                    echo " checked = checked ";
+                                } ?>type="radio"
+                    value="biochemistry"
+                    id="biochemistry"
+                    name="department"><label
+                            class="form-check-label" for="biochemistry">Biochemistry</label></div>
+                <div class="form-check report-no-print"><input
+                        class="form-check-input"
+                        onChange="this.form.submit();" <?php if ($Iddepartment == 2) {
+                            echo " checked = checked ";
+                        } ?> type="radio" value="hematology" id="hematology" name="department"><label
+                        class="form-check-label" for="hematology">Hematology</label></div>
+                <div class="form-check report-no-print"><input
+                        class="form-check-input" onChange="this.form.submit();" <?php if ($Iddepartment == 3) {
+                            echo " checked = checked ";
+                        } ?> type="radio" value="hormone" id="hormone" name="department"><label class="form-check-label"
+                                                                                                for="hormone">Hormone</label>
+                </div>
+            </div>
+        </div>
+        <?php
+                if ($Iddepartment == 1) $reportprintlistdep = "Biochemistry";
+                if ($Iddepartment == 2) $reportprintlistdep = "Hematology";
+                if ($Iddepartment == 3) $reportprintlistdep = "Hormone";
+            ?>
+        <h1 class="reportprintlist" style="display: none;"><?php echo $methodfilter."-".$reportprintlistdep; ?></h1>
+        <div class="card-body">
+            <div class="col-auto">
+                <div class="row">
+                    <div class="col" id="rankpart">
+                        <div class="card chartbox">
+                            <div class="card-header">
+                                <h2 class="text-center mb-0">Ranking Chart</h2>
+                            </div>
+                            <div class="card-body">
+                                <div class="chartdate">
+                                    <p class="justify-content-lg-center align-items-lg-center"><label for='MDCday'> Date
+                                        : </label>
+                                        <select onChange="$('#myform').attr('action','Report.php#rankpart');this.form.submit();"
+                                                type="int" name="MDCday"
+                                                id="MDCday">
+                                            <?php for ($i = 1;
+                                                               $i <= count($MDCdays);
+                                                               $i++) { ?>
+                                            <option
+                                            <?php if ($MDCdays[$i] == $MDCday) {
+                                                            echo "selected";
+                                                        } ?> value= <?php echo $MDCdays[$i] ?>
+                                            > <?php echo miladi_to_shamsi($MDCdays[$i]) ?> </option>
+                                            <?php } ?>
+                                        </select></p>
+                                </div>
+                                <p class="text-center justify-content-lg-center align-items-lg-center bounce">Your Score
+                                    : <?php echo $yorscor ?>
+                                    &nbsp;</p>
+                                <div class="col" ID="MDCpart">
+                                    <canvas id="MDC" class="radialchart"></canvas>
+                                </div>
+                                <div class="text-center justify-content-lg-center align-items-lg-center bounce">
+                                    <span class="material-icons align-middle rounded-circle"
+                                          style="color: #ff8787;background-color: #e0e0e0;">fiber_manual_record</span>
+                                    <span class="justify-content-lg-center align-items-lg-center">Poor</span>
+                                    <i class="material-icons align-middle ml-3 rounded-circle"
+                                       style="color: #fffc3d;background-color: #e0e0e0;">fiber_manual_record</i>
+                                    <span class="justify-content-lg-center align-items-lg-center">Marginial</span>
+                                    <i class="material-icons align-middle ml-3 rounded-circle"
+                                       style="color: #71ff80;background-color: #e0e0e0;">fiber_manual_record</i>
+                                    <span class="justify-content-lg-center align-items-lg-center">Good</span>
+                                    <i class="material-icons text-white align-middle ml-3 rounded-circle"
+                                       style="background-color: #e0e0e0;">fiber_manual_record</i>
+                                    <span class="justify-content-lg-center align-items-lg-center">Excellent</span>
+                                </div>
+                                <div class="text-center justify-content-lg-center align-items-lg-center bounce mt-3">
+                                    <i class="material-icons text-primary align-middle"
+                                       style="transform:rotate(45deg);">stop</i>
+                                    <span class="justify-content-lg-center align-items-lg-center">Your Laboratory</span>
+                                    <i class="material-icons align-middle ml-3">fiber_manual_record</i>
+                                    <span class="justify-content-lg-center align-items-lg-center">Other Laboratories</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" id="">
+                    <div class="col" id="DEVpart">
+                        <div class="card chartbox">
+                            <div class="card-header">
+                                <h2 class="text-center mb-0">Bias Chart</h2>
+                            </div>
+                            <div class="card-body">
+                                <div class="chartdate">
+                                    <p class="justify-content-lg-center align-items-lg-center"><label for='analyteDEV'>
+                                        Analyte : </label>
+                                        <select onChange="$('#myform').attr('action','Report.php#DEVpart');this.form.submit();"
+                                                ​ type="int" name="analyteDEV">
+                                            <?php for ($i = 0; $i <= count($analytelist) - 1; $i++) { ?>
+                                            <option
+                                            <?php if ($analytelist[$i][0] == $analyteDEV) {echo "selected";} ?>
+                                            value= <?php echo $analytelist[$i][0] ?>
+                                            > <?php echo $analytelist[$i][1] ?> </option><?php } ?></select></p>
+                                </div>
+                                <div class="col">
+                                    <div>
+                                        <canvas id="DEV"></canvas>
+                                    </div>
+                                    <div class="col charthelp">
+                                        <i class="material-icons d-line float-left">stop</i>
+                                        <p class="justify-content-lg-center align-items-lg-center">acceptable</p>
+                                        <i class="material-icons d-line float-left">stop</i>
+                                        <p class="justify-content-lg-center align-items-lg-center">unacceptable</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col" id="Departmentpart">
+                        <div class="card tablebox pagebreak">
+                            <div class="card-header">
+                                <h2 class="mb-0">Department Table</h2>
+                            </div>
+                            <div class="card-body">
+                                <div class="chartdate">
+                                    <p><label for='Tday'>Date : </label>
+                                        <select onChange="$('#myform').attr('action','Report.php#Departmentpart');this.form.submit();"
+                                                type="int" name="Tday" id="Tday">
+                                            <?php for ($i = 1;
+                                                   $i <= count($MDCdays);
+                                                   $i++) { ?>
+                                            <option
+                                            <?php if ($MDCdays[$i] == $Tday) {
+                                                echo "selected";
+                                            } ?> value= <?php echo $MDCdays[$i] ?>
+                                            > <?php echo miladi_to_shamsi($MDCdays[$i]) ?> </option>
+                                            <?php } ?>
+                                        </select></p>
+                                </div>
+                                <div class="table-responsive text-center d-lg-flex">
+                                    <div class="tableFixHead">
+                                        <table class="table">
+                                            <thead>
+                                            <tr>
+                                                <?php for ($i = 0;
+                                                           $i <= count($ktable_H) - 1;
+                                                           $i++): ?>
+                                                <th style="background-color: rgba(207,233,255,100);">
+                                                    <?php echo $kFact_table[0][$i]; ?>
+                                                </th>
+                                                <?php endfor; ?>
+                                            </tr>
+                                            </thead>
+                                            <tbody style="background-color: #ffffff;">
+                                            </tr>
+                                            <?php for ($i = 1;
+                                                       $i < count($kFact_table);
+                                                       $i++): ?>
+                                            <tr>
+                                                <?php for ($j = 0;
+                                                               $j <= count($ktable_H) - 1;
+                                                               $j++): ?>
+                                                <td>
+                                                    <?php echo $kFact_table[$i][$j]; ?>
+                                                </td>
+                                                <?php endfor; ?>
+                                            </tr>
+                                            <?php endfor; ?>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col" id="Sigmapart">
+                    <div class="card tablebox secondtablebox pagebreak">
+                        <div class="card-header">
+                            <h2 class="mb-0">Sigma Metric Table</h2>
+                        </div>
+                        <div class="card-body">
+                            <div class="chartdate">
+                                <p><label for='QGIday'>Date :</label>
+                                    <select onChange="$('#myform').attr('action','Report.php#Sigmapart');this.form.submit();"
+                                            type="int" name="QGIday" id="QGIday">
+                                        <?php for ($i = 1;
+                                               $i <= count($MDCdays);
+                                               $i++) { ?>
+                                        <option
+                                        <?php if ($MDCdays[$i] == $QGIday) {
+                                            echo "selected";
+                                        } ?> value= <?php echo $MDCdays[$i] ?>
+                                        > <?php echo miladi_to_shamsi($MDCdays[$i]) ?> </option>
+                                        <?php } ?>
+                                    </select></p>
+                            </div>
+                            <div class="table-responsive text-center d-lg-flex">
+                                <div class="tableFixHead">
+                                    <table class="table">
+                                        <thead>
+                                        <tr>
+                                            <?php for ($i = 0;
+                                                       $i <= 7;
+                                                       $i++): ?>
+                                            <th style="background-color: rgba(207,233,255,100);">
+                                                <?php echo $QGI_table[0][$i]; ?>
+                                            </th>
+                                            <?php endfor; ?>
+                                        </tr>
+                                        </thead>
+                                        <tbody style="background-color: #ffffff;">
+                                        </tr>
+                                        <?php for ($i = 1;
+                                                   $i < count($QGI_table);
+                                                   $i++): ?>
+                                        <tr>
+                                            <?php for ($j = 0;
+                                                           $j <= 7;
+                                                           $j++): ?>
+                                            <td>
+                                                <?php echo $QGI_table[$i][$j]; ?>
+                                            </td>
+                                            <?php endfor; ?>
+                                        </tr>
+                                        <?php endfor; ?>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        </div>
+        </div>
+        <script href="{% static 'saka/assets/js/jquery.min.js' %}"></script>
+        <script href="{% static 'saka/assets/bootstrap/js/bootstrap.min.js' %}"></script>
+        <script href="{% static 'saka/assets/js/chart.min.js' %}"></script>
+        <script href="{% static 'saka/assets/js/bs-init.js' %}"></script>
+        <button onclick="window.print();" class="printbutton report-no-print">Print</button>
+
+    </form>
+{% endblock %}
+
+<script>
+    //######################################################## MDC1 radar
+    var labidmdc =
+    <
+        ? php echo
+    json_encode($labid);
+        ?
+    >
+    ;
+    var labname =
+    <
+        ? php echo
+    json_encode($labname);
+        ?
+    >
+    ;
+    var MDC = [];
+    var MDC1 =
+    <
+        ? php echo
+    json_encode($MDC);
+        ?
+    >
+    ;
+    var MDClabid1 =
+    <
+        ? php echo
+    json_encode($MDClabs);
+        ?
+    >
+    ;
+    var mdclabname =
+    <
+        ? php echo
+    json_encode($MDClabname);
+        ?
+    >
+    ;
+    var MDClabid = []
+    var mdclabnames = []
+    for (const j in mdclabname) {
+        mdclabnames[j] = mdclabname[j];
+    }
+    for (const j in MDClabid1) {
+        MDClabid[j] = MDClabid1[j];
+    }
+    for (const j in MDC1) {
+        MDC[j] = parseFloat(MDC1[j]);
+    }
+    var repeatelem = function (elem, n) {
+        var arr = [];
+        for (var i = 0; i <= n; i++) {
+            arr = arr.concat(elem);
+        }
+        ;
+        return arr;
+    };
+    var color_MDC = repeatelem("rgba(255,255,255,0)", 360)
+    var colorb_MDC = repeatelem("rgba(255,255,255,0)", 360)
+    var pointStyle_MDC = repeatelem('', 360)
+    var MDCdata = repeatelem(0, 360)
+    var lenlabm = (MDClabid.length) - 1;
+    var faselem = Math.round(360 / lenlabm)
+    var km = 1
+    var lm = 1
+    var mdclib = repeatelem("", 360);
+    //while (condition) {
+    // code block to be executed
+    //}
+    var max = MDClabid.reduce(function (a, b) {
+        return Math.max(a, b);
+    });
+    for (i = 1; i <= (mdclabnames.length) - 1; i++) {
+        if (mdclabnames[lm] == labname) {
+            mdclib[km] = ""; /*mdclabnames[lm]*/
+            MDCdata[km] = -MDC[lm];
+            color_MDC[km] = "rgb(3,19,49)";
+            colorb_MDC[km] = "rgb(0,157,255)";
+            pointStyle_MDC[km] = "rectRot";
+        } else {
+            mdclib[km] = ""; /*mdclabnames[lm]*/
+            MDCdata[km] = -MDC[lm];
+            color_MDC[km] = "rgba(24,24,24,0.89)";
+            colorb_MDC[km] = "rgba(10,10,10,0.76)";
+        }
+        lm = lm + 1;
+        km = km + faselem;
+    }
+    var ctx2 = document.getElementById('MDC').getContext('2d');
+    var MDC = new Chart(ctx2, {
+        type: 'radar',
+        data: {
+            "labels": mdclib,
+            "datasets": [
+                {
+                    type: 'radar',
+                    "label": "",
+                    "data": MDCdata,
+                    "borderColor": color_MDC,
+                    "backgroundColor": colorb_MDC,
+                    pointStyle: pointStyle_MDC,
+                    pointRadius: 6,
+                    fill: false,
+                },
+                {
+                    "label": "",
+                    "data": repeatelem(0, 360),
+                    pointRadius: 0,
+                    "borderColor": "rgba(128,1,1,0)",
+                    "backgroundColor": "rgba(255,0,0,0)",
+                    fill: false,
+                },
+                {
+                    "label": "Poor",
+                    "data": repeatelem(-50, 360),
+                    "borderColor": "rgba(14,14,14,0.17)",
+                    "backgroundColor": "rgba(255,0,0,0.47)",
+                    pointRadius: 0,
+                    fill: 1,
+                },
+                {
+                    "label": "Mariginal",
+                    "data": repeatelem(-70, 360),
+                    "borderColor": "rgba(14,14,14,0.17)",
+                    "backgroundColor": "rgba(255,251,0,0.76)",
+                    pointRadius: 0,
+                    fill: "-1",
+                },
+                {
+                    "label": "Good",
+                    "data": repeatelem(-90, 360),
+                    "borderColor": "rgba(14,14,14,0.17)",
+                    "backgroundColor": "rgba(2,255,28,0.56)",
+                    pointRadius: 0,
+                    fill: "-1",
+
+                },
+                {
+                    "label": "Excellent",
+                    "data": repeatelem(-100, 360),
+                    "borderColor": "rgba(14,14,14,0.17)",
+                    "backgroundColor": "rgba(255,255,255,0.89)",
+                    pointRadius: 0,
+                    fill: "-1",
+                },
+
+
+            ]
+        },
+        options: {
+            responsive: true,
+            "elements": {
+                "line": {
+                    "tension": 0,
+                    "borderWidth": 3
+                }
+            },
+            "legend": {
+                "display": false,
+                "position": 'bottom',
+                "top": 100,
+                "labels": {
+                    "fontSize": 16,
+                    fontColor: 'rgb(23,0,6)'
+                }
+            },
+            scale: {
+                gridLines: {circular: true},
+                ticks: {
+                    "fontSize": 15,
+                    max: -10,
+                    min: -100,
+                    //stepSize: -10
+                },
+                pointLabels: {
+                    fontSize: 20
+                },
+            }
+        }
+    })
+</script>
+
+<script>
+    var labid =
+    <
+        ? php echo
+    json_encode($labid);
+        ?
+    >
+    ;
+    //######################################### DEV
+    var tdateDEV = [];
+    var DEV = [];
+    var accDEV1 =
+    <
+        ? php echo
+    json_encode($AnalitInfo[2]);
+        ?
+    >
+    ;
+    var accDEV = parseFloat(accDEV1)
+    var DEV1 =
+    <
+        ? php echo
+    json_encode($DEV);
+        ?
+    >
+    ;
+    var tdate1DEV =
+    <
+        ? php echo
+    json_encode($datedev);
+        ?
+    >
+    ;
+    for (const t in tdate1DEV) {
+        DEV[t] = parseFloat(DEV1[t][0]);
+        tdateDEV[t] = (tdate1DEV[t][0]);
+    }
+    var devdata = []
+    for (const d in DEV) {
+        if (DEV[d] > 3 * accDEV) {
+            devdata[d] = 3 * accDEV
+        } else if (DEV[d] < -3 * accDEV) {
+            devdata[d] = -3 * accDEV
+        } else {
+            devdata[d] = DEV[d]
+        }
+    }
+    // chart ######################################################### DEV
+    new Chart(document.getElementById("DEV"), {
+        type: 'line',
+        data: {
+            labels: tdateDEV,
+            datasets: [{
+                label: "Bias",
+                type: "line",
+                borderColor: "#010942",
+                backgroundColor: "rgba(0,3,102,0)",
+                data: devdata,
+                lineTension: 0.1,
+                pointRadius: 5,
+            }, {
+                type: "line",
+                borderColor: "rgba(0,0,0,0.58)",
+                backgroundColor: "rgba(255,0,0,0.47)",
+                data: [{x: tdateDEV[0], y: -3 * accDEV}, {x: tdateDEV[tdateDEV.length - 1], y: -3 * accDEV}],
+                fill: '+1',
+                pointRadius: 0,
+            }, {
+                type: "line",
+                borderColor: "rgba(0,0,0,0.58)",
+                backgroundColor: "rgb(255,255,255)",
+                data: [{x: tdateDEV[0], y: -accDEV}, {x: tdateDEV[tdateDEV.length - 1], y: -accDEV}],
+                fill: '+1',
+                pointRadius: 0,
+
+            }, {
+                type: "line",
+                borderColor: "rgba(0,0,0,0.58)",
+                backgroundColor: "rgb(255,255,255)",
+                data: [{x: tdateDEV[0], y: 0}, {x: tdateDEV[tdateDEV.length - 1], y: 0}],
+                fill: false,
+                pointRadius: 0,
+            }, {
+                type: "line",
+                borderColor: "rgba(0,0,0,0.58)",
+                backgroundColor: "rgb(255,255,255)",
+                data: [{x: tdateDEV[0], y: accDEV}, {x: tdateDEV[tdateDEV.length - 1], y: accDEV}],
+                fill: '-2',
+                pointRadius: 0,
+            }, {
+                type: "line",
+                borderColor: "rgba(0,0,0,0.58)",
+                backgroundColor: "rgba(255,0,0,0.47)",
+                data: [{x: tdateDEV[0], y: 3 * accDEV}, {x: tdateDEV[tdateDEV.length - 1], y: 3 * accDEV}],
+                fill: '-1',
+                pointRadius: 0,
+            }
+            ]
+        },
+        options: {
+            responsive: true,
+            hoverMode: 'index',
+            title: {
+                display: true,
+            },
+            legend: {display: false},
+            scales: {
+                yAxes: [{
+
+                    type: 'linear',
+                    display: true,
+                    position: 'left',
+                    id: 'y-axis-1',
+                },
+                ],
+            }
+
+        }
+    });
+
+</script>

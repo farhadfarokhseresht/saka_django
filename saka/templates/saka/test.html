@@ -1,0 +1,10 @@
+{% extends 'saka/header.html' %}
+
+{% block main %}
+    {% if form %}
+{#        {% for i in form %}#}
+{#            <p>{{ i }}</p>#}
+{#        {% endfor %}#}
+        {{ form }}
+    {% endif %}
+{% endblock %}

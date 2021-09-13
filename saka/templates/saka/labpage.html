@@ -1,0 +1,35 @@
+{% extends 'saka/header.html' %}
+
+<style>
+    p {
+        margin-top: 250px;
+        display: block;
+        color: white;
+        font-weight: bolder;
+        font-size: 30px;
+        border-bottom: 2px solid white;
+        padding: 25px 0;
+        width: 40%;
+        margin: 0 auto;
+    }
+
+    @media only screen and (max-width: 768px) {
+        p {
+            padding: 5px 0;
+            width: 80%;
+        }
+    }
+</style>
+
+{% block extra %}
+    <title>ساکا | سامانه ارزیابی کیفیت آزمایشگاه‌ها</title>
+{% endblock %}
+
+{% block main %}
+    <h2 style="text-align:center;margin-top: 15%;"><p>
+        {#        ازمایشگاه#}
+        {{ user_lab_name }}
+        <br>"خوش آمدید"</p>
+    </h2>
+{% endblock %}
+

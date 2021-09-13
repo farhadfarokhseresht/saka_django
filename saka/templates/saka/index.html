@@ -1,0 +1,552 @@
+{% comment %}
+<?php
+session_name('panel');
+session_start();
+session_unset();
+session_destroy();
+include "signup.php";
+if (!empty($_GET['s'])) {
+    if ($_GET['s'] == 0) {
+        echo "<script type='text/javascript'>alert('اطلاعات وارد شده ناقص و یا اشتباه می‌باشد.');</script>";
+    }else{
+        echo "<script type='text/javascript'>alert('اطلاعات شما ارسال شد.');</script>";
+    }
+}
+?>
+{% endcomment %}
+<!doctype html>
+{% load static %}
+<html class="no-js" lang="en">
+<head>
+    <meta charset="utf-8">
+
+    <!--====== Title ======-->
+    <title>ساکا | سامانه ارزیابی کیفیت آزمایشگاه‌ها</title>
+
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!--====== Favicon Icon ======-->
+    <link rel="shortcut icon" href="{% static 'saka/mp/images/saka-2.png' %}" type="image/png" >
+
+    <!--====== Magnific Popup CSS ======-->
+    <link rel="stylesheet" href="{% static 'saka/mp/css/magnific-popup.css' %}" >
+
+    <!--====== Slick CSS ======-->
+    <link rel="stylesheet" href="{% static 'saka/mp/css/slick.css' %}">
+
+    <!--====== Line Icons CSS ======-->
+    <link rel="stylesheet" href="{% static 'saka/mp/css/LineIcons.css' %}">
+
+    <!--====== Bootstrap CSS ======-->
+    <link rel="stylesheet" href="{% static 'saka/mp/css/bootstrap.min.css' %}">
+
+    <!--====== Default CSS ======-->
+    <link rel="stylesheet" href="{% static 'saka/mp/css/default.css' %}">
+
+    <!--====== Style CSS ======-->
+    <link rel="stylesheet" href="{% static 'saka/mp/css/style.css' %}">
+    <script src="{% static 'saka/mp/js/jquery.min.js' %}"></script>
+    <script type="text/javascript">
+        function isChecked(checkbox, subform) {
+            var button = document.getElementById(subform);
+            var modal = document.getElementById("myModal");
+
+            if (checkbox.checked === true) {
+                button.disabled = "";
+                modal.style.display = "none";
+            } else {
+                button.disabled = "disabled";
+            }
+        }
+    </script>
+</head>
+
+<body>
+<!--[if IE]>
+<p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade
+    your browser</a> to improve your experience and security.</p>
+<![endif]-->
+
+<!--====== PRELOADER PART START ======-->
+<div class="preloader">
+    <div class="loader">
+        <div class="ytp-spinner">
+            <div class="ytp-spinner-container">
+                <div class="ytp-spinner-rotator">
+                    <div class="ytp-spinner-left">
+                        <div class="ytp-spinner-circle"></div>
+                    </div>
+                    <div class="ytp-spinner-right">
+                        <div class="ytp-spinner-circle"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--====== PRELOADER PART ENDS ======-->
+
+<!--====== NAVBAR TWO PART START ======-->
+
+<section class="navbar-area">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <nav class="navbar navbar-expand-lg">
+
+                    <!--<a class="navbar-brand" href="#">
+                        <img src="mp/images/saka.png" alt="Logo" width="64px">
+                    </a> -->
+
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTwo"
+                            aria-controls="navbarTwo" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="toggler-icon"></span>
+                        <span class="toggler-icon"></span>
+                        <span class="toggler-icon"></span>
+                    </button>
+
+                    <div class="collapse navbar-collapse sub-menu-bar" id="navbarTwo">
+                        <ul class="navbar-nav m-auto">
+                            <li class="nav-item active"><a class="page-scroll" href="#home">صفحه اصلی</a></li>
+                            <li class="nav-item"><a class="page-scroll" href="#system-map">نقشه راه</a></li>
+                            <li class="nav-item"><a class="page-scroll" href="#about">درباره ما</a></li>
+                            <li class="nav-item"><a class="page-scroll" href="#signup-request">درخواست عضویت</a></li>
+                            <li class="nav-item"><a class="page-scroll" href="#contact">تماس با ما</a></li>
+                            <li class="nav-item"><a class="solid" href="{% url 'saka:signin' %}" >ورود کاربران</a></li>
+                        </ul>
+                    </div>
+
+                    <!--<div class="navbar-btn d-sm-inline-block">
+                        <ul>
+                            <li><a class="solid" href="signin.php">ورود کاربران</a></li>
+                        </ul>
+                    </div>-->
+                </nav> <!-- navbar -->
+            </div>
+        </div> <!-- row -->
+    </div> <!-- container -->
+</section>
+
+<!--====== NAVBAR TWO PART ENDS ======-->
+
+<!--====== SLIDER PART START ======-->
+
+<section id="home" class="slider_area">
+    <div id="carouselThree" class="carousel slide" data-ride="carousel">
+        <div class="slider-image-box d-lg-flex align-items-end">
+            <div class="slider-image" oncontextmenu="return false;" onmousedown="return false">
+                <img src="{% static 'saka/mp/images/slider.jpg' %}" alt="Hero">
+            </div>
+        </div>
+    </div>
+</section>
+
+<!--====== SLIDER PART ENDS ======-->
+
+<!--====== FEATRES TWO PART START ======-->
+
+<section id="system-map" class="system-map-area">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-6 col-md-10">
+                <div class="section-title text-center pb-10">
+                    <h2 class="title">نقشه راه</h2>
+                </div> <!-- row -->
+            </div>
+        </div> <!-- row -->
+        <div class="row justify-content-center">
+            <div class="system-map-icon">
+                <img class="shape" src="{% static 'saka/mp/images/sitemap.png' %}" alt="Shape">
+            </div>
+        </div> <!-- row -->
+    </div> <!-- container -->
+</section>
+
+<!--====== FEATRES TWO PART ENDS ======-->
+
+<!--====== ABOUT PART START ======-->
+
+<section id="about" class="about-area">
+    <div class="container">
+        <div class="about-title">
+            <h2 class="title">درباره ما</h2>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-md-3 team mt-50">
+                <div class="text-center">
+                    <div class="team-image" oncontextmenu="return false;" onmousedown="return false">
+                        <img src="{% static 'saka/mp/images/team-1.jpg' %}" alt="Team">
+                    </div>
+                    <div class="team-content">
+                        <span class="sub-title">تیم فنی</span>
+                        <h5 class="team-name">دکتر حسین حق بین</h5>
+                        <div class="row justify-content-center mt-3">
+                            <a href="#" class="text-blue"><i class="lni lni-telegram-original"></i></a>
+                            <a href="#" class="text-danger mr-3"><i class="lni lni-instagram-original"></i></a>
+                            <a href="#" class="text-dark mr-3" style="font-size: 20px;line-height: 0;"><i
+                                    class="lni lni-envelope"></i></a>
+                        </div>
+                    </div>
+                </div> <!-- single team -->
+            </div>
+            <div class="col-md-3 team mt-50">
+                <div class="text-center">
+                    <div class="team-image" oncontextmenu="return false;" onmousedown="return false">
+                        <img src="{% static 'saka/mp/images/team-2.jpg' %}" alt="Team">
+                    </div>
+                    <div class="team-content">
+                        <span class="sub-title">تیم علمی</span>
+                        <h5 class="team-name">علی امرونی</h5>
+                        <div class="row justify-content-center mt-3">
+                            <a href="#" class="text-blue"><i class="lni lni-telegram-original"></i></a>
+                            <a href="#" class="text-danger mr-3"><i class="lni lni-instagram-original"></i></a>
+                            <a href="#" class="text-dark mr-3" style="font-size: 20px;line-height: 0;"><i
+                                    class="lni lni-envelope"></i></a>
+                        </div>
+                    </div>
+                </div> <!-- single team -->
+            </div>
+            <div class="col-md-3 team mt-50">
+                <div class="text-center">
+                    <div class="team-image" oncontextmenu="return false;" onmousedown="return false">
+                        <img src="{% static 'saka/mp/images/team-3.jpg' %}" alt="Team">
+                    </div>
+                    <div class="team-content">
+                        <span class="sub-title">تیم علمی</span>
+                        <h5 class="team-name">فاطمه قره چاهی</h5>
+                        <div class="row justify-content-center mt-3">
+                            <a href="#" class="text-blue"><i class="lni lni-telegram-original"></i></a>
+                            <a href="#" class="text-danger mr-3"><i class="lni lni-instagram-original"></i></a>
+                            <a href="#" class="text-dark mr-3" style="font-size: 20px;line-height: 0;"><i
+                                    class="lni lni-envelope"></i></a>
+                        </div>
+                    </div>
+                </div> <!-- single team -->
+            </div>
+        </div>
+        <div class="row justify-content-center">
+
+            <div class="col-md-3 team mt-50">
+                <div class="text-center">
+                    <div class="team-image" oncontextmenu="return false;" onmousedown="return false">
+                        <img src="{% static 'saka/mp/images/team-4.jpg' %}" alt="Team">
+                    </div>
+                    <div class="team-content">
+                        <span class="sub-title">تیم فنی</span>
+                        <h5 class="team-name">دکتر رضا شرف دینی</h5>
+                        <div class="row justify-content-center mt-3">
+                            <a href="#" class="text-blue"><i class="lni lni-telegram-original"></i></a>
+                            <a href="#" class="text-danger mr-3"><i class="lni lni-instagram-original"></i></a>
+                            <a href="#" class="text-dark mr-3" style="font-size: 20px;line-height: 0;"><i
+                                    class="lni lni-envelope"></i></a>
+                        </div>
+                    </div>
+                </div> <!-- single team -->
+            </div>
+            <div class="col-md-3 team mt-50">
+                <div class="text-center">
+                    <div class="team-image" oncontextmenu="return false;" onmousedown="return false">
+                        <img src="{% static 'saka/mp/images/team-5.jpg' %}" alt="Team">
+                    </div>
+                    <div class="team-content">
+                        <span class="sub-title">تیم فنی</span>
+                        <h5 class="team-name">فرهاد فرخ سرشت</h5>
+                        <div class="row justify-content-center mt-3">
+                            <a href="#" class="text-blue"><i class="lni lni-telegram-original"></i></a>
+                            <a href="#" class="text-danger mr-3"><i class="lni lni-instagram-original"></i></a>
+                            <a href="#" class="text-dark mr-3" style="font-size: 20px;line-height: 0;"><i
+                                    class="lni lni-envelope"></i></a>
+                        </div>
+                    </div>
+                </div> <!-- single team -->
+            </div>
+            <div class="col-md-3 team mt-50">
+                <div class="text-center">
+                    <div class="team-image" oncontextmenu="return false;" onmousedown="return false">
+                        <img src="{% static 'saka/mp/images/team-6.jpg' %}" alt="Team">
+                    </div>
+                    <div class="team-content">
+                        <span class="sub-title">تیم فنی</span>
+                        <h5 class="team-name">احمد نامور</h5>
+                        <div class="row justify-content-center mt-3">
+                            <a href="#" class="text-blue"><i class="lni lni-telegram-original"></i></a>
+                            <a href="#" class="text-danger mr-3"><i class="lni lni-instagram-original"></i></a>
+                            <a href="#" class="text-dark mr-3" style="font-size: 20px;line-height:0;"><i
+                                    class="lni lni-envelope"></i></a>
+                        </div>
+                    </div>
+                </div> <!-- single team -->
+            </div>
+        </div>
+    </div> <!-- container -->
+</section>
+
+<!--====== ABOUT PART ENDS ======-->
+
+<!--====== TEAM START ======-->
+
+<section id="signup-request" class="signup-request-area pt-120 pb-130">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-6 col-md-10">
+                <div class="section-title text-center pb-30">
+                    <h2 class="title">به ما ملحق شوید!</h2>
+                    <p class="text">جهت پیوستن به ساکا، ابتدا لازم است شرایط عضویت را مطالعه و تایید کرده، سپس فرم زیر
+                        را با دقت تکمیل و ارسال کنید.</p>
+                    <div class="mt-20 termsCheck">
+                        <button id="termBtn">شرایط عضویت</button>
+                    </div>
+
+                </div> <!-- section title -->
+            </div>
+        </div> <!-- row -->
+        <div class="row" id="singup">
+            <form method="POST" class="col-md-12" name="signup-request-form" action="#singup"
+                  enctype="multipart/form-data">
+                <div class="row">
+                    <div class="col-md-6">
+                        <label for='name'>نام آزمایشگاه</label>
+                        <input type="text" name="name" placeholder="نام آزمایشگاه">
+                    </div>
+                    <div class="col-md-6">
+                        <label for='phonenumber'>تلفن همراه</label>
+                        <input type="tel" name="phonenumber" placeholder="تلفن همراه">
+                    </div>
+                    <div class="col-md-6">
+                        <label for='email'>ایمیل</label>
+                        <input type="email" name="email" placeholder="ایمیل">
+                    </div>
+                    <div class="col-md-3">
+                        <label for='Province'>استان</label>
+                        <input type="text" name="Province" placeholder="استان">
+                    </div>
+                    <div class="col-md-3">
+                        <label for='City'>شهر</label>
+                        <input type="text" name="City" placeholder="شهر">
+                    </div>
+                    <div class="col-md-12">
+                        <label for='permission'>مجوز فعالیت آزمایشگاه</label>
+                        <span>(فرمت مجاز : PDF , JPG)</span>
+                        <input type="file" name="permission" accept="application/pdf,image/png, image/jpeg">
+                    </div>
+                    <div class="col-md-12">
+                        <label for='license'>پروانه مسئول فنی آزمایشگاه</label>
+                        <span>(فرمت مجاز : PDF , JPG)</span>
+                        <input type="file" name="license" accept="application/pdf,image/png, image/jpeg">
+                    </div>
+                    <div class="col-md-12">
+                        <label for='qce_license'>گواهی شرکت در برنامه ارزیابی کنترل کیفی خارجی</label>
+                        <span>(فرمت مجاز : PDF , JPG)</span>
+                        <input type="file" name="qce_license" accept="application/pdf,image/png, image/jpeg">
+                    </div>
+                    <div class="col-md-12">
+                        <input type="submit" value="ارسال درخواست" name='submit' id="subform" disabled="disabled">
+                    </div>
+                </div>
+            </form>
+        </div> <!-- row -->
+    </div> <!-- container -->
+</section>
+
+<!--====== TEAM  ENDS ======-->
+
+<!--====== FOOTER PART START ======-->
+
+<section id="contact" class="footer-area footer-dark">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-6">
+                <div class="footer-logo text-center" oncontextmenu="return false;" onmousedown="return false">
+                    <a class="mt-30" href="index.html"><img src="{% static 'saka/mp/images/saka-3.png' %}"
+                                                            alt="Logo"></a>
+                </div> <!-- footer logo -->
+                <div class="footer-support text-center">
+                    <span class="number">077-33446643</span>
+                    <span class="mail">sakalab@gmail.com</span>
+                </div>
+                <!--<div class="copyright text-center mt-35">
+                    <p class="text">Designed by <a href="https://uideck.com" rel="nofollow">UIdeck</a> and Built-with <a rel="nofollow" href="https://ayroui.com">Ayro UI</a> </p>
+                </div>   copyright -->
+            </div>
+        </div>
+        <div class="section-title text-center mt-50 border-bottom pb-20">
+            <h2 class="text-white">اسپانسرها</h2>
+        </div>
+        <div class="row justify-content-center mt-10 sponsor">
+            <div class="col-md-3 col-sm-6 text-center mt-30">
+                <img src="{% static 'saka/mp/images/vista.png' %}" alt="Logo" oncontextmenu="return false;"
+                     onmousedown="return false">
+                <div class="single-contact-info d-flex justify-content-center">
+                    <div class="contact-info-icon">
+                        <a class="mt-30" href="https://www.instagram.com/vista.ds/" target="_blank"><i
+                                class="lni lni-instagram-original" style="background-color:#be323c"></i></a>
+                    </div>
+                    <div class="contact-info-icon">
+                        <a class="mt-30" href="tel:+989380084250" target="_blank" data-toggle="tooltip"
+                           data-placement="top" title="09380084250"><i class="lni lni-phone"
+                                                                       style="background-color:#0096f5"></i></a>
+                    </div>
+                    <div class="contact-info-icon">
+                        <a class="mt-30" href="https://www.wistads.ir/" target="_blank"><i class="lni lni-link"
+                                                                                           style="background-color:#009600"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 text-center mt-30">
+                <img src="{% static 'saka/mp/images/kt.png' %}" alt="Logo" oncontextmenu="return false;"
+                     onmousedown="return false">
+                <div class="single-contact-info d-flex justify-content-center">
+                    <div class="contact-info-icon">
+                        <a class="mt-30" href="#" target="_blank"><i class="lni lni-instagram-original"
+                                                                     style="background-color:#be323c"></i></a>
+                    </div>
+                    <div class="contact-info-icon">
+                        <a class="mt-30" href="tel:+987733564135" target="_blank" data-toggle="tooltip"
+                           data-placement="top" title="077-33564135"><i class="lni lni-phone"
+                                                                        style="background-color:#0096f5"></i></a>
+                    </div>
+                    <div class="contact-info-icon">
+                        <a class="mt-30" href="#" target="_blank"><i class="lni lni-link"
+                                                                     style="background-color:#009600"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 text-center mt-30">
+                <img src="{% static 'saka/mp/images/pgu.png' %}" alt="Logo" oncontextmenu="return false;"
+                     onmousedown="return false">
+                <div class="single-contact-info d-flex justify-content-center">
+                    <div class="contact-info-icon">
+                        <a class="mt-30" href="https://www.instagram.com/pgu_pr/" target="_blank"><i
+                                class="lni lni-instagram-original" style="background-color:#be323c"></i></a>
+                    </div>
+                    <div class="contact-info-icon">
+                        <a class="mt-30" href="tel:+987731222078" target="_blank" data-toggle="tooltip"
+                           data-placement="top" title="077-31222078"><i class="lni lni-phone"
+                                                                        style="background-color:#0096f5"></i></a>
+                    </div>
+                    <div class="contact-info-icon">
+                        <a class="mt-30" href="https://pgu.ac.ir/" target="_blank"><i class="lni lni-link"
+                                                                                      style="background-color:#009600"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 text-center mt-30">
+                <img src="{% static 'saka/mp/images/te.png' %}" alt="Logo" oncontextmenu="return false;"
+                     onmousedown="return false">
+                <div class="single-contact-info d-flex justify-content-center">
+                    <div class="contact-info-icon">
+                        <a class="mt-30" href="https://www.instagram.com/taminejtemaee" target="_blank"><i
+                                class="lni lni-instagram-original" style="background-color:#be323c"></i></a>
+                    </div>
+                    <div class="contact-info-icon">
+                        <a class="mt-30" href="tel:+987733341755" target="_blank" data-toggle="tooltip"
+                           data-placement="top" title="077-33341755"><i class="lni lni-phone"
+                                                                        style="background-color:#0096f5"></i></a>
+                    </div>
+                    <div class="contact-info-icon">
+                        <a class="mt-30" href="https://bushehr.tamin.ir/" target="_blank"><i class="lni lni-link"
+                                                                                             style="background-color:#009600"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div> <!-- container -->
+    </div>
+</section>
+<!--====== FOOTER PART ENDS ======-->
+
+<!--====== BACK TOP TOP PART START ======-->
+
+<a href="#" class="back-to-top"><i class="lni lni-chevron-up"></i></a>
+
+<!--====== BACK TOP TOP PART ENDS ======-->
+
+<!--====== PART START ======-->
+
+<!--
+    <section class="">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-">
+                    
+                </div>
+            </div>
+        </div>
+    </section>
+-->
+
+<!--====== PART ENDS ======-->
+<div id="myModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h3>مستندات و شرایط لازم جهت عضویت در ساکا</h3>
+        <p>1 - تصویر مجوز فعالیت و پروانه مسئول فنی آزمایشگاه ارائه گردد.</p>
+        <p>2 - تصویر گواهی شرکت در برنامه ارزیابی کنترل کیفی خارجی ارائه گردد.</p>
+        <p>3 - بیشتر از 90 % آزمایشات مورد ارزیابی سامانه ساکا ، در آزمایشگاه متقاضی پذیرش و انجام شود.</p>
+        <p>4 - خطای کل آزمایشگاه در کلیه تست های مورد ارزیابی از خطای کل مجاز کمتر باشد( TE < TAE )</p>
+        <p>5 - فاکتور خرید کنترل های تجاری با شماره سریال و برند اعلام شده برای حداقل یک بازه زمانی 6 ماهه ارائه
+            گردد.</p>
+        <p>6 - قرار داد دریافت خون کنترل و فاکتور خرید آن با شماره سریال و برند اعلام شده برای بازه زمانی 3 ماهه ارائه
+            گردد.</p>
+        <p>7 - برای کلیه تست های مورد ارزیابی CV بین ران محاسبه و ثیت شود.</p>
+        <p>8 - اصالت مستندات فوق توسط بخش فنی ساکا تایید گردد.</p>
+        <p><input type="checkbox" id="termsCheck" onchange="isChecked(this,'subform')"/>
+            شرایط عضویت را مالعه کرده و می پذریم.
+        </p>
+    </div>
+
+</div>
+
+<script>
+    var modal = document.getElementById("myModal");
+    var btn = document.getElementById("termBtn");
+    var span = document.getElementsByClassName("close")[0];
+    btn.onclick = function () {
+        modal.style.display = "block";
+    }
+    span.onclick = function () {
+        modal.style.display = "none";
+    }
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+</script>
+
+
+<!--====== Jquery js ======-->
+<script src="{% static 'saka/mp/js/vendor/jquery-1.12.4.min.js' %}"></script>
+<script src="{% static 'saka/mp/js/vendor/modernizr-3.7.1.min.js' %}"></script>
+
+<!--====== Bootstrap js ======-->
+<script src="{% static 'saka/mp/js/popper.min.js' %}"></script>
+<script src="{% static 'saka/mp/js/bootstrap.min.js' %}"></script>
+
+<!--====== Slick js ======-->
+<script src="{% static 'saka/mp/js/slick.min.js' %}"></script>
+
+<!--====== Magnific Popup js ======-->
+<script src="{% static 'saka/mp/js/jquery.magnific-popup.min.js' %}"></script>
+
+<!--====== Ajax Contact js ======-->
+<script src="{% static 'saka/mp/js/ajax-contact.js' %}"></script>
+
+<!--====== Isotope js ======-->
+<script src="{% static 'saka/mp/js/imagesloaded.pkgd.min.js' %}"></script>
+<script src="{% static 'saka/mp/js/isotope.pkgd.min.js' %}"></script>
+
+<!--====== Scrolling Nav js ======-->
+<script src="{% static 'saka/mp/js/jquery.easing.min.js' %}"></script>
+<script src="{% static 'saka/mp/js/scrolling-nav.js' %}"></script>
+
+<!--====== Main js ======-->
+<script src="{% static 'saka/mp/js/main.js' %}"></script>
+
+</body>
+
+</html>

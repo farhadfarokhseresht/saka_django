@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{% static 'saka/css/style.css' %}">
+    <title>ساکا | سامانه ارزیابی کیفیت آزمایشگاه ها</title>
+    <link rel="shortcut icon" href="{% static 'saka/css/tlogo.png' %}" type="image/x-icon">
+    <style>
+        a:link, a:visited {
+            background-color: rgba(0, 152, 222, 0.18);
+            color: rgba(25, 178, 255, 0.62);
+
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 20px;
+            display: inline-block;
+        }
+
+        a:hover, a:active {
+            background-color: rgba(0, 152, 222, 0.18);
+            color: rgba(25, 178, 255, 0.99);
+        }
+        #formlogin label,ul{
+            display: none;
+        }
+        #formlogin li{
+            color: red;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body class="login">
+    <div class="login-box">
+        <div class="login-form" id="formpo">
+            <img src="{% static 'saka/css/logos.png' %}" class="Login-logo">
+            <form action={% url 'saka:signin' %} method="post" id="formlogin">
+             {% csrf_token %}
+
+{#                    <input required id="id_username" name="username" type="text" placeholder="نام کاربری"/>#}
+{#                    <input required id="id_password" name="password" type="password" placeholder="رمز عبور"/>#}
+                    {{form}}
+                {% if form.errors %}
+                    <h4>نام کاربری یا رمز عبور اشتباه است.</h4>
+                {% endif %}
+                <div class="login-submit">
+                    <input type="submit" value="ورود"/>
+                </div>
+                <h4><a href="{% url 'saka:index' %}">صفحه اصلی</a></h4>
+            </form>
+        </div>
+        <img src="{% static 'saka/css/lbox.jpg' %}" class="lbox">
+    </div>
+
+
+</body>
+</html>
+
+
